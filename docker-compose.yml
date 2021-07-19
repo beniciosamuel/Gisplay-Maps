@@ -1,0 +1,32 @@
+version: "3.2"
+services: 
+
+    db:
+        image: mongo:4.2
+        container_name: db
+        restart: always
+        ports: 
+            - ${DB_PORT}:27017
+        environment: 
+            MONGO_INITDB_DATABASE: ${DB_NAME}
+
+    api:
+        image: node:latest
+        container_name: api
+        restart: always
+        env_file: 
+            - .env
+        depends_on: 
+            - db
+        ports: 
+            - ${SERVER_PORT}:${SERVER_PORT}
+        volumes: 
+            - .:/usr/src/app
+        working_dir: /usr/src/app
+        command: npm install express
+        command: yarn start
+        logging: 
+            driver: "json-file"
+            options: 
+                max-size: "10m"
+                max-file: "5"

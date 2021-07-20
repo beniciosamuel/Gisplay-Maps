@@ -51,80 +51,6 @@
     <script type="module">
         const socket = await io();
         const email = window.location.pathname.replace('/verify:', '');
-        $('#resend').click(() =>  {
-            const data = JSON.stringify({
-                "email": email
-            });
-
-            const xhr = new XMLHttpRequest();
-            xhr.withCredentials = true;
-
-            xhr.addEventListener("readystatechange", function () {
-                $("#loadScreen").addClass("in");
-                setTimeout(() => {
-                    $("#loadScreen").removeClass("in");
-                    $("#loadScreen").addClass("out");
-                }, 4000);
-
-                if (this.readyState === this.DONE) {
-                    const log = JSON.parse(this.responseText);
-                    if (log["error"]) {
-                        $('#myAlert').html(log["error"]);
-                        $("#myAlert").addClass("in");
-                        setTimeout(() => {
-                            $("#myAlert").removeClass("in");
-                            $("#myAlert").addClass("out");
-                        }, 4000);
-                    } else {
-                        const data = JSON.stringify({
-                            "email": email
-                        });
-
-                        const xhr = new XMLHttpRequest();
-                        xhr.withCredentials = true;
-
-                        xhr.addEventListener("readystatechange", function () {
-                            if (this.readyState === this.DONE) {
-                                const log2 =  JSON.parse(this.responseText);
-                                if (log2["error"]) {
-                                    $('#myAlert').html(log2["error"]);
-                                    $("#myAlert").addClass("in");
-                                    setTimeout(() => {
-                                        $("#myAlert").removeClass("in");
-                                        $("#myAlert").addClass("out");
-                                    }, 4000);
-                                } else {
-                                    $('#myAlert').html("O email foi enviado");
-                                    $("#myAlert").addClass("in");
-                                    setTimeout(() => {
-                                        $("#myAlert").removeClass("in");
-                                        $("#myAlert").addClass("out");
-                                        window.location.assign("/");
-                                    }, 4000);
-                                }
-                            }
-                        });
-
-                        xhr.open("POST", "/auth/forgot_password");
-                        xhr.setRequestHeader("Content-Type", "application/json");
-
-                        xhr.send(data);
-
-                        $('#myAlert').html("Email para confirmação enviado!");
-                        $("#myAlert").addClass("in");
-                        setTimeout(() => {
-                            $("#myAlert").removeClass("in");
-                            $("#myAlert").addClass("out");
-                        }, 4000);
-                    }
-                }
-            });
-
-            xhr.open("POST", "/auth/forgot_password");
-            xhr.setRequestHeader("Content-Type", "application/json");
-
-            xhr.send(data);
-        })
 
         $('#sendConfirm').click(() => {
             if ($('#token').val() == '') {
@@ -144,9 +70,21 @@
                     if (this.readyState === this.DONE) {
                         const log = JSON.parse(this.responseText);
                         if (log["error"]) {
-                            console.log(log["error"]);
+                            $('#myAlert').html("Houve um erro contacte o setor de Projetos!");
+                            $("#myAlert").addClass("in");
+                            setTimeout(() => {
+                                $("#myAlert").removeClass("in");
+                                $("#myAlert").addClass("out");
+                                window.location.assign('/');
+                            }, 6000);
                         } else {
-                            console.log('Email confirmado!');
+                            $('#myAlert').html("O usuário foi confirmado, entre em contato com seu Supervisor para Habilitá-lo no sistema!");
+                            $("#myAlert").addClass("in");
+                            setTimeout(() => {
+                                $("#myAlert").removeClass("in");
+                                $("#myAlert").addClass("out");
+                                window.location.assign('/');
+                            }, 6000);
                         }
                     }
                 });

@@ -66,7 +66,7 @@ socket.on('connection', (sckt) => {
     sckt.on('arcgis', arg => {
         const { func, pathAcces, tkn } = arg;
         const services = {
-            'tokengenerate': () => {
+            'tokengenerate': (id) => {
                 request.post({
                     url: 'https://www.arcgis.com/sharing/rest/oauth2/token/',
                     json: true,
@@ -78,7 +78,7 @@ socket.on('connection', (sckt) => {
                         'expiration': 1440
                     }
                 }, function(error, response, body) {
-                    socket.emit('sendtoken', body.access_token);
+                    socket.emit(id, body.access_token);
                 })                
             },
             'authtoken': () => {
@@ -100,7 +100,7 @@ socket.on('connection', (sckt) => {
                 socket.emit('constructor', { status: 'constructed' });
             }
         }
-        services[func]();
+        services[func](tkn);
     })
 })
 

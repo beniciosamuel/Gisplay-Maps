@@ -132,8 +132,7 @@
                             $("#loadScreen").addClass("out");
                             $('#myAlert').html(log["error"]);
                             $("#myAlert").addClass("in");
-                            if (log["error"] == "User not confirm Email") { 
-                                console.log(email)
+                            if (log["error"] == "User not confirm Email") {
                                 window.localStorage.setItem('emailUser', email);                               
                                 window.location.assign("/verify:" + email);
                             }  
@@ -143,7 +142,6 @@
                             }, 4000);                                                          
                         }, 3000);
                     } else {
-                        console.log()
                         $('#myAlert').html("Usuário reconhecido!");
                         $("#myAlert").addClass("in");
                         setTimeout(() => {
@@ -163,37 +161,6 @@
             xhr.send(data);
         })
 
-        $('btnRemail').click(() => {
-            const email = $('#remail').val();
-
-            if (email != '' && email != undefined) {
-                const data = JSON.stringify({
-                    "email": email
-                });
-
-                const xhr = new XMLHttpRequest();
-                xhr.withCredentials = true;
-
-                xhr.addEventListener("readystatechange", function () {
-                if (this.readyState === this.DONE) {
-                    const log = JSON.parse(this.responseText);
-                    if (log["error"]) {
-                        console.log(log["error"]);
-                    } else { 
-                        
-                    }
-                }
-                });
-
-                xhr.open("POST", "/auth/forgot_password");
-                xhr.setRequestHeader("Content-Type", "application/json");
-
-                xhr.send(data);
-            } else {
-                console.log('Não pode estar vazio!')
-            }
-        })
-
         $('#btnRemail').click(() => {
             const email = $('#remail').val()
 
@@ -209,24 +176,9 @@
                     if (this.readyState === this.DONE) {
                         const log = JSON.parse(this.responseText);                        
                         if (log["error"]) {
-                            $('#myAlert').html(log["error"]);
-                            $("#myAlert").addClass("in");
-                            setTimeout(() => {
-                                $("#myAlert").removeClass("in");
-                                $("#myAlert").addClass("out");
-                            }, 4000);
-                        } else  {
-                            $("#loadScreen").addClass("in");
-                            setTimeout(() => {
-                                $("#loadScreen").removeClass("in");
-                                $("#loadScreen").addClass("out");
-                                $('#myAlert').html("Email para confirmação enviado!");
-                                $("#myAlert").addClass("in");
-                                setTimeout(() => {
-                                    $("#myAlert").removeClass("in");
-                                    $("#myAlert").addClass("out");
-                                }, 4000);
-                            }, 2000);                            
+                            showMessages(log["error"]);   
+                        } else  {   
+                            showMessages("Email com token de redefinição enviado!");                     
                         }
                     }
                 });
@@ -239,10 +191,9 @@
         });
 
         $('#btnNewPass').click(() => {
-            console.log('Hey')
             if ($('#newpassword').val() != "" && $('#renewpassword').val() != "" && $('#reemail').val() != "" && $('#redefinetoken').val() != "") {
                 if ($('#newpassword').val() != $('#renewpassword').val()) {
-                    console.log("As senhas não coincidem!")
+                    showMessages("As senhas não coincidem!")
                 } else {
                     const email = $('#reemail').val();
                     const token = $('#redefinetoken').val();
@@ -261,9 +212,9 @@
                         if (this.readyState === this.DONE) {
                             const log = JSON.parse(this.responseText);
                             if (log["error"]) {
-                                console.log(log["error"]);
+                                showMessages(log["error"])
                             } else {
-                                console.log("A senha foi alterada!")
+                                showMessages("A senha foi alterada com sucesso!")
                             }
                         }
                     });
@@ -274,8 +225,22 @@
                     xhr.send(data);
                 }
             } else {
-                console.log("Os campos não podem estar vazios!")
+                showMessages("Os campos não podem estar vazios!")
             }
         })
+
+        function showMessages (info) {
+            $("#loadScreen").addClass("in");
+            setTimeout(() => {
+                $("#loadScreen").removeClass("in");
+                $("#loadScreen").addClass("out");
+                $('#myAlert').html(info);
+                $("#myAlert").addClass("in");
+                setTimeout(() => {
+                    $("#myAlert").removeClass("in");
+                    $("#myAlert").addClass("out");
+                }, 4000);
+            }, 2000);  
+        }
     </script>
 </html>

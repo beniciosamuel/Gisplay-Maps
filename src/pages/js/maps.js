@@ -1,6 +1,7 @@
 const socket = io();
 var datauser;
-var arrId = [];
+var arrIdPendents = [];
+var arrIdUsers = [];
 
 let token = window.localStorage.getItem('token');
 let dataUserParam = window.localStorage.getItem('dataUser');
@@ -23,7 +24,6 @@ $(document).ready(() => {
   }
 
   if (dataUser.sector != 'projetos') {
-    console.log(dataUser.sector);
     document.getElementById('promoteUser').remove();
   }
 
@@ -32,64 +32,69 @@ $(document).ready(() => {
     })  
 
     $('#configUsers').click(() => {
-      console.log(dataUser.email)
       newRequest(dataUser.email, 'getall', 'POST');
     })
 
     $('#closeConfig').click(() => {
       let node;
-      if (arrId) {
-        Object.values(arrId).forEach((el) => {
+      if (arrIdUsers) {
+        Object.values(arrIdUsers).forEach((el) => {
           node = document.getElementById(el);
           document.getElementById('listUsersSector').removeChild(node);
         })
       }
     
-      arrId = [];
+      arrIdUsers = [];
     })
 
     $('#checkUsers').click(() => {
-      console.log(dataUser.email)
       newRequest(dataUser.email, 'get-pendents', 'POST');
     })
 
     $('#closePendents').click(() => {
       let node;
-      if (arrId) {
-        Object.values(arrId).forEach((el) => {
+      if (arrIdPendents) {
+        Object.values(arrIdPendents).forEach((el) => {
           node = document.getElementById(el);
           document.getElementById('listUsers').removeChild(node);
         })
       }
     
-      arrId = [];
+      arrIdPendents = [];
     })
 
     $('#acceptUser').click(() => {
       let active = document.getElementsByClassName('list-group-item active');
-      const el = arrId.splice(arrId.indexOf(active[0].getAttribute('value')));
+      const el = active[0].getAttribute('value');
+      arrIdPendents.splice(arrIdPendents.indexOf(active[0].getAttribute('value')), 1);
       newRequest(dataUser.email, 'release', 'PUT', el);
+      active[0].remove();
     })
 
     $('#rejectUser').click(() => {
       let active = document.getElementsByClassName('list-group-item active');
-      const el = arrId.splice(arrId.indexOf(active[0].getAttribute('value')));
+      const el = active[0].getAttribute('value');
+      arrIdPendents.splice(arrIdPendents.indexOf(active[0].getAttribute('value')), 1);
       newRequest(dataUser.email, 'reject', 'DELETE', el);
+      active[0].remove();
     })
 
     $('#delUser').click(() => {
       let active = document.getElementsByClassName('list-group-item active');
-      const el = arrId.splice(arrId.indexOf(active[0].getAttribute('value')));
+      const el = active[0].getAttribute('value');
+      arrIdUsers.splice(arrIdUsers.indexOf(active[0].getAttribute('value')), 1);
       newRequest(dataUser.email, 'reject', 'DELETE', el);
+      active[0].remove();
     })
+
     $('#resettPass').click(() => {
       let active = document.getElementsByClassName('list-group-item active');
-      const el = arrId.splice(arrId.indexOf(active[0].getAttribute('value')));
+      const el = active[0].getAttribute('value');
       newRequest(dataUser.email, 'forgot', 'POST', el);
     })
     $('#promoteUser').click(() => {
       let active = document.getElementsByClassName('list-group-item active');
-      const el = arrId.splice(arrId.indexOf(active[0].getAttribute('value')));
+      const el = active[0].getAttribute('value');
       newRequest(dataUser.email, 'upgrade', 'PUT', el);
     })
 })
@@ -108,7 +113,6 @@ function signOut () {
 } 
 
 async function newRequest (emailToSend, path, type, emailToUpdate) {
-  console.log(path);
   const xhr = new XMLHttpRequest();
   xhr.withCredentials = true;
 
@@ -116,13 +120,14 @@ async function newRequest (emailToSend, path, type, emailToUpdate) {
     if (this.readyState === this.DONE) {
       const log = JSON.parse(this.responseText);
       if (log["error"]) {
-        console.log(log["error"]);        
+        console.log(log["error"]);
+        showMessages('Houve um erro, contacte o setor de Projetos!', 8000);       
       } else {
         const functions = {
           "getall": () => {
             let arrUsers = JSON.parse(this.responseText);
             arrUsers.forEach(element => {
-              arrId.push(element["_id"]);
+              arrIdUsers.push(element["_id"]);
               let instobja = document.createElement('a');
               let instobji = document.createElement('i');
               let instobjdiv = document.createElement('div');
@@ -148,7 +153,7 @@ async function newRequest (emailToSend, path, type, emailToUpdate) {
           "get-pendents": () => {
             let arrUsers = JSON.parse(this.responseText);
             arrUsers.forEach(element => {
-              arrId.push(element["_id"]);
+              arrIdPendents.push(element["_id"]);
               let instobja = document.createElement('a');
               let instobji = document.createElement('i');
               let instobjdiv = document.createElement('div');
@@ -171,13 +176,13 @@ async function newRequest (emailToSend, path, type, emailToUpdate) {
               document.getElementById('listUsers').appendChild(instobja)
             });
           },
-          "release": () => {
-            showMessages('O usuário foi removido do sistema!', 8000);
+          "release": () => {                      
+            showMessages('O usuário agora pode acessar o sistema!', 8000);
           },
           "reject": () => {
-            showMessages('O usuário foi removido do sistema!', 8000);
+            showMessages('O usuário foi removido do sistema!', 8000)
           },
-          "forgot_password": () => {
+          "forgot": () => {
             showMessages('Um email para que o usuário reconfigure sua senha foi enviado!', 8000);
           },
           "upgrade": () => {
@@ -196,16 +201,13 @@ async function newRequest (emailToSend, path, type, emailToUpdate) {
     xhr.send(JSON.stringify({ "email": emailToSend }));
   }
   if (type == 'POST' && path == 'forgot') {
-    console.log(emailToUpdate[0])
-    xhr.send(JSON.stringify({ "email": emailToSend, "userResetPass": emailToUpdate[0] }));
+    xhr.send(JSON.stringify({ "email": emailToSend, "userResetPass": emailToUpdate }));
   }
   if (type == 'PUT') {
-    console.log(emailToUpdate[0])
-    xhr.send(JSON.stringify({ "email": emailToSend, "userUpdate": emailToUpdate[0] }));
+    xhr.send(JSON.stringify({ "email": emailToSend, "userUpdate": emailToUpdate }));
   }
   if (type == 'DELETE') {
-    console.log(emailToUpdate[0])
-    xhr.send(JSON.stringify({ "email": emailToSend, "userRemove": emailToUpdate[0] }));
+    xhr.send(JSON.stringify({ "email": emailToSend, "userRemove": emailToUpdate }));
   }
 }
 

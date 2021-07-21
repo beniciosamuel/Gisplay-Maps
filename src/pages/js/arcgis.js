@@ -68,10 +68,10 @@ socket.on(userId, function(token) {
                     {
                         name: "Serviço de Geocodificação",
                         placeholder: "Ex.: Rua 418, 1369",
-                        apiKey: "AAPK34ec65d4807f41e99648e09bb783f04amtSzGgiBVsOlwV_vlUUbtYDn71qq0EWaAMHBnyV8MzvqrBPVkSceq7dSfDHAAVLM",
+                        apiKey: "AAPKfa176b384a0f4731b5616ab458000295sqFrPIg9EfPL30UQ5vEZbERzqVymJealBtlTJ5IDwsRvMZd_uOW5LYFtrmmEIDOO",
                         singleLineFieldName: "SingleLine",
                         locator: new Locator({
-                        url: "https://geocode-api.arcgis.com/arcgis/rest/services/World/GeocodeServer"
+                            url: "http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"
                         })
                     }
                 ]

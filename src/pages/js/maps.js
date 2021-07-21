@@ -27,6 +27,12 @@ $(document).ready(() => {
     document.getElementById('promoteUser').remove();
   }
 
+  $('#btnViewMap').click(() => {
+    let active = document.getElementsByClassName('list-group-item active');
+    const el = active[0].getAttribute('value');
+    callMap(el);
+  })
+
     $('#btn_signOut').click(() => {
       signOut();
     })  
@@ -220,4 +226,20 @@ function showMessages(info, time) {
   setTimeout(() => {
     spaninfo.remove();
   }, time); 
+}
+
+function callMap (map) {
+  const service = {
+    "rede_ativa": () => {
+      showMessages("Você já está no Rede Ativa!", 8000)
+    },
+    "equipamentos": () => {
+      showMessages("Mapa em processo de construção!", 8000)
+    },
+    mdu: () => {
+      showMessages("Mapa em processo de construção!", 8000)
+    }
+  }
+
+  service[map]();
 }

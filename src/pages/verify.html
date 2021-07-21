@@ -70,7 +70,7 @@
                     if (this.readyState === this.DONE) {
                         const log = JSON.parse(this.responseText);
                         if (log["error"]) {
-                            $('#myAlert').html("Houve um erro contacte o setor de Projetos!");
+                            $('#myAlert').html(log["error"]);
                             $("#myAlert").addClass("in");
                             setTimeout(() => {
                                 $("#myAlert").removeClass("in");

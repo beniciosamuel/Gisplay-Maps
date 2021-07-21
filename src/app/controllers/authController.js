@@ -46,11 +46,12 @@ router.post('/register', async (req, res) => {
 
         mailer.sendMail({
             to: email,
-            from: 'samuelmultiplay@gmail.com',
+            from: 'samuel.multiplay@gmail.com',
             template: 'auth/confirm_email',
             context: { token }
         }, (err) => {
             if(err) {
+                console.log(err);
                 return res.status(400).send({ error: 'Cannot send confirm email'});
             }
                 

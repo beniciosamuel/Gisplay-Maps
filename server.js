@@ -66,7 +66,7 @@ socket.on('connection', (sckt) => {
     sckt.on('arcgis', arg => {
         const { func, pathAcces, tkn } = arg;
         const services = {
-            'tokengenerate': (id) => {
+            'tokengenerateInit': (id) => {
                 request.post({
                     url: 'https://www.arcgis.com/sharing/rest/oauth2/token/',
                     json: true,
@@ -78,7 +78,28 @@ socket.on('connection', (sckt) => {
                         'expiration': 1440
                     }
                 }, function(error, response, body) {
-                    socket.emit(id, body.access_token);
+                    const data = {
+                        token: body.access_token,
+                        map: {
+                            id: "16823bdee2cb42d4b8c173fce596bf8d",
+                            feature: {
+                                layers: [{
+                                    url: "https://services3.arcgis.com/kLX7U8fknUKht1rW/arcgis/rest/services/Rede%20Ativa%20Conex%C3%A3o%20CE/FeatureServer",
+                                    apiKey: "AAPK34ec65d4807f41e99648e09bb783f04amtSzGgiBVsOlwV_vlUUbtYDn71qq0EWaAMHBnyV8MzvqrBPVkSceq7dSfDHAAVLM",
+                                    title: "Rede Ativa",
+                                }],
+                                sources: [{
+                                    searchFields: ["Node", "POP", "ARMARIO", "OLT"],
+                                    displayField: "Node",
+                                    exactMatch: false,
+                                    outFields: ["TECNOLOGIA", "ARMARIO", "POP"],
+                                    name: "Pesquisa por Nodes",
+                                    placeholder: "Ex.: FOFG01, FOR02..."
+                                }]
+                            }
+                        }
+                    }
+                    socket.emit(id, data);
                 })                
             },
             'authtoken': () => {
@@ -98,18 +119,60 @@ socket.on('connection', (sckt) => {
             },
             'mapconstructor': () => {
                 socket.emit('constructor', { status: 'constructed' });
+            },
+            'equipamentos': (id) => {
+                console.log(id)
+                request.post({
+                    url: 'https://www.arcgis.com/sharing/rest/oauth2/token/',
+                    json: true,
+                    form: {
+                        'f': 'json',
+                        'client_id': client_id,
+                        'client_secret': secret,
+                        'grant_type': 'client_credentials',
+                        'expiration': 1440
+                    }
+                }, function(error, response, body) {
+                    const data = {
+                        token: body.access_token,
+                        map: {
+                            id: "ff2357df20fd430dbcdc08cc4716fcbd",
+                            feature: {
+                                layers: [{
+                                    url: "https://services3.arcgis.com/kLX7U8fknUKht1rW/arcgis/rest/services/Rede%20Ativa%20Conex%C3%A3o%20CE/FeatureServer",
+                                    apiKey: "AAPK34ec65d4807f41e99648e09bb783f04amtSzGgiBVsOlwV_vlUUbtYDn71qq0EWaAMHBnyV8MzvqrBPVkSceq7dSfDHAAVLM",
+                                    title: "Rede Ativa",
+                                },
+                                {
+                                    url: "https://services3.arcgis.com/kLX7U8fknUKht1rW/arcgis/rest/services/FOR/FeatureServer",
+                                    apiKey: "AAPK34ec65d4807f41e99648e09bb783f04amtSzGgiBVsOlwV_vlUUbtYDn71qq0EWaAMHBnyV8MzvqrBPVkSceq7dSfDHAAVLM",
+                                    title: "FOR",
+                                }],
+                                sources: [{
+                                    searchFields: ["Node", "POP", "ARMARIO", "OLT"],
+                                    displayField: "Node",
+                                    exactMatch: false,
+                                    outFields: ["TECNOLOGIA", "ARMARIO", "POP"],
+                                    name: "Pesquisa por Nodes",
+                                    placeholder: "Ex.: FOFG01, FOR02..."
+                                },
+                                {
+                                    searchFields: ["Numero Serie", "Camino Red"],
+                                    displayField: "Numero Serie",
+                                    exactMatch: false,
+                                    outFields: [],
+                                    name: "Pesquisa por Equipamentos",
+                                    placeholder: "Ex.: SP00001, SP01901..."
+                                }]
+                            }
+                        }
+                    }
+                    socket.emit(id, data);
+                })                
             }
         }
         services[func](tkn);
     })
-})
-
-gisp.get('/token-arcgis', (req, res) => {
-    
-})
-
-gisp.post('/auth-arcgis', (req, res) => {
-    
 })
 
 require('./src/app/controllers/index')(gisp);

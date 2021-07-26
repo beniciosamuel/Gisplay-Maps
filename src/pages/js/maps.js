@@ -1,4 +1,5 @@
-const socket = io();
+const socket = await io();
+const userId = JSON.parse(window.localStorage.getItem('dataUser')).user["_id"]
 var datauser;
 var arrIdPendents = [];
 var arrIdUsers = [];
@@ -231,12 +232,15 @@ function showMessages(info, time) {
 function callMap (map) {
   const service = {
     "rede_ativa": () => {
-      showMessages("Você já está no Rede Ativa!", 8000)
+      socket.emit('arcgis', { 'func': 'tokengenerateInit', 'path': '', 'tkn': userId});
+      showMessages("Você está no Rede Ativa!", 8000)
     },
     "equipamentos": () => {
-      showMessages("Mapa em processo de construção!", 8000)
+      console.log("Equipamentos " + userId)
+      socket.emit('arcgis', { 'func': 'equipamentos', 'path': '', 'tkn': userId});
+      showMessages("Este é o mapa de Equipamentos!", 8000)
     },
-    mdu: () => {
+    "mdu": () => {
       showMessages("Mapa em processo de construção!", 8000)
     }
   }

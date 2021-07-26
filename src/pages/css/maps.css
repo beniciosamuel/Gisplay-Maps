@@ -16,7 +16,7 @@
   }
   
   body::-webkit-scrollbar {
-    width: 0.25rem;
+    width: 0.25vmax;
   }
   
   body::-webkit-scrollbar-track {
@@ -31,7 +31,8 @@
     position: fixed;
     background-color: var(--bg-primary);
     transition: width 600ms ease;
-    z-index: 3
+    z-index: 3;
+    font-size: 1vmax;
   }
   
   .navbar-nav {
@@ -55,7 +56,7 @@
   .nav-link {
     display: flex;
     align-items: center;
-    height: 5rem;
+    height: 10vh;
     color: var(--text-primary);
     text-decoration: none;
     filter: grayscale(100%) opacity(0.7);
@@ -70,19 +71,21 @@
   
   .link-text {
     display: none;
-    margin-left: 1rem;
+    margin-left: 1vmax;
   }
   
   .nav-link svg {
-    width: 2rem;
-    min-width: 2rem;
-    margin: 0 1.5rem;
+    width: 2vmax;
+    min-width: 2vmax;
+    min-height: 2vh;
+    margin: 0 1.5vmax;
   }
 
   .nav-link i {
-    width: 1rem;
-    min-width: 1rem;
-    margin: 0 1rem;
+    width: 1vmax;
+    min-width: 1vmax;
+    min-height: 2vh;
+    margin: 0 1vmax;
   }
   
   .fa-primary {
@@ -104,7 +107,7 @@
     text-align: center;
     color: var(--text-secondary);
     background: var(--bg-secondary);
-    font-size: 1.5rem;
+    font-size: 1.5vmax;
     letter-spacing: 0.3ch;
     width: 100%;
   }
@@ -126,11 +129,6 @@
     transform: rotate(-180deg);
   }
 
-  .navbar:hover ~ .map-frame {
-    margin-left: 11vw;
-    width: 84.5vw;
-  }
-
   .nav-item a span:hover {
     color: #ff7eee;
   }
@@ -139,8 +137,9 @@
   @media only screen and (max-width: 600px) {
     .navbar {
       bottom: 0;
-      width: 100vw;
-      height: 5rem;
+      width: 100vmax;
+      height: 8vmax;
+      font-size: 4.4vh;
     }
   
     .logo {
@@ -160,9 +159,8 @@
     }
 
     .footer-nav {
-      position: absolute;
-      left: 92vw;
-      bottom: 3.5vh;
+      position: relative;
+      left: 95vw;
     }
 
     #manageUsers {
@@ -172,7 +170,7 @@
     .map-frame {
       margin-left: 0;
       width: 100vw;
-      height: 87vh;
+      height: 95vmax;
     }
   }
   
@@ -180,12 +178,12 @@
   @media only screen and (min-width: 600px) {
     .navbar {
       top: 0;
-      width: 4rem;
-      height: 100vh;
+      width: 4vmax;
+      height: 100vmax;
     }
   
     .navbar:hover {
-      width: 14rem;
+      width: 14vmax;
     }
   
     .navbar:hover .link-text {
@@ -194,7 +192,7 @@
   
     .navbar:hover .logo svg
     {
-      margin-left: 11rem;
+      margin-left: 11vmax;
     }
   
     .navbar:hover .logo-text
@@ -203,15 +201,21 @@
     }
 
     .footer-nav {
-      padding-left: 1.5vw;
-      bottom: 2vh;
+      position: absolute;
+      padding-left: 1vw;
+      top: 94vh;
     }
 
     .map-frame {
       position: relative;
-      width: 95.7vw;
+      width: 98.7vmax;
       height: 100vh;
-      left: 4vw;
+      left: 1.1vmax;
+    }
+
+    .navbar:hover ~ .map-frame {
+      margin-left: 12vmax;
+      width: 86.7vmax;
     }
   }
   
@@ -253,8 +257,8 @@
   }
 
   #viewDiv { 
-    height: 100vh;
-    width: 100vw; 
+    height: 100vmax;
+    width: 100vmax; 
     background-position: center;
     background-size: cover;
     transition: all 0.5s;
@@ -264,16 +268,16 @@
   .map-footer {
     z-index: 5;
     position: absolute;
-    bottom: 0.5vw;
-    left: 50vw;
-    transform: translate(-50%);
+    /* bottom: 0.5vmax;
+    left: 50vmax;
+    transform: translate(-50%); */
   }
 
   #msg {
     z-index: 10;
     position: absolute;
-    bottom: 12vw;
-    right: 0.1vw;
+    bottom: 12vmax;
+    right: 0.1vmax;
   }
 
   .ofade {
@@ -298,14 +302,14 @@
     opacity: 1;
   }
 
-  .increment {
+  .incvmaxent {
     padding-left: 100px;
   }
 
   .footer-nav {
     position: absolute;
     color: #b6b6b6;
-    border: 10vw;
+    border: 10vmax;
     border-top: #ff1212;
   }  
 
@@ -315,6 +319,6 @@
   }
 
   .map-frame {
-    transition: width 600ms ease;
-    transition: margin-left 300ms ease;
+    transition: width 900ms ease;
+    transition: margin-left 700ms ease;
   }

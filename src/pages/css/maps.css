@@ -208,14 +208,14 @@
 
     .map-frame {
       position: relative;
-      width: 98.7vmax;
+      width: 96.3vmax;
       height: 100vh;
-      left: 1.1vmax;
+      left: 3.5vmax;
     }
 
     .navbar:hover ~ .map-frame {
-      margin-left: 12vmax;
-      width: 86.7vmax;
+      margin-left: 10vmax;
+      width: 86.3vmax;
     }
   }
   

@@ -1,7 +1,7 @@
-const path = require('path');
-const nodemailer = require('nodemailer');
-const hbs = require('nodemailer-express-handlebars')
-const { host, port, user, pass } = require ('../config/mail.json')
+import path from 'path';
+import nodemailer from 'nodemailer';
+import hbs from 'nodemailer-express-handlebars'
+import { host, port, user, pass } from '../config/mail.js'
 
 const transport = nodemailer.createTransport({
     host,
@@ -20,4 +20,4 @@ transport.use('compile', hbs({
     extName: '.html',
 }));
 
-module.exports = transport;
+export default transport;

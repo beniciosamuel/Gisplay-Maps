@@ -1,7 +1,7 @@
-const jwt = require('jsonwebtoken');
-const authConfig = require('../../config/auth.json')
+import jwt from 'jsonwebtoken';
+import * as authConfig from '../../config/auth.js'
 
-module.exports = (req, res, next) => {
+export default (req, res, next) => {
     const authHeader = req.headers.authorization;
     if (!authHeader)
         return res.status(401).send({ error: 'No token provided' });

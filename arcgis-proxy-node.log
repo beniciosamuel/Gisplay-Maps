@@ -1,0 +1,38 @@
+2021-08-19T11:59:22.620Z: [I] Loading configuration from ../conf/config.xml
+2021-08-19T11:59:22.726Z: Stopping server via normal exit.
+2021-08-19T12:26:17.396Z: [I] Loading configuration from ../conf/config.xml
+2021-08-19T12:26:17.497Z: Stopping server via normal exit.
+2021-08-19T14:19:29.906Z: [I] Loading configuration from ../conf/config.xml
+2021-08-19T14:19:30.036Z: Stopping server via normal exit.
+2021-08-19T14:20:10.774Z: [I] Loading configuration from ../conf/config.xml
+2021-08-19T14:20:10.823Z: Stopping server via normal exit.
+2021-08-19T14:26:58.533Z: [I] Loading configuration from ../conf/config.xml
+2021-08-19T14:26:58.652Z: [I] Starting proxy version 0.1.5 running on DESKTOP-L5NM9UH (Windows_NT, 10.0.19042) via HTTP server on port 3692 -- 19/08/2021 11:26:58
+2021-08-19T15:52:42.796Z: Stopping server via app terminated via SIGINT.
+2021-08-19T15:52:42.851Z: Stopping server via normal exit.
+2021-08-19T15:52:47.045Z: [I] Loading configuration from ../conf/config.xml
+2021-08-19T15:52:47.212Z: [I] Starting proxy version 0.1.5 running on DESKTOP-L5NM9UH (Windows_NT, 10.0.19042) via HTTP server on port 3692 -- 19/08/2021 12:52:47
+2021-08-19T15:53:11.910Z: Stopping server via app terminated via SIGINT.
+2021-08-19T15:53:11.919Z: Stopping server via normal exit.
+2021-08-19T15:53:14.752Z: [I] Loading configuration from ../conf/config.xml
+2021-08-19T15:53:14.847Z: [I] Starting proxy version 0.1.5 running on DESKTOP-L5NM9UH (Windows_NT, 10.0.19042) via HTTP server on port 3692 -- 19/08/2021 12:53:14
+2021-08-19T15:56:52.673Z: Stopping server via app terminated via SIGINT.
+2021-08-19T15:56:52.678Z: Stopping server via normal exit.
+2021-08-19T15:56:57.632Z: [I] Loading configuration from ../conf/config.xml
+2021-08-19T15:56:57.738Z: [I] Starting proxy version 0.1.5 running on DESKTOP-L5NM9UH (Windows_NT, 10.0.19042) via HTTP server on port 3692 -- 19/08/2021 12:56:57
+2021-08-19T15:58:34.803Z: Stopping server via app terminated via SIGINT.
+2021-08-19T15:58:34.809Z: Stopping server via normal exit.
+2021-08-19T15:58:38.615Z: [I] Loading configuration from ../conf/config.xml
+2021-08-19T15:58:39.052Z: Stopping server via normal exit.
+2021-08-19T16:23:55.335Z: [I] Loading configuration from ../conf/config.xml
+2021-08-19T16:23:55.424Z: [I] Starting proxy version 0.1.5 running on DESKTOP-L5NM9UH (Windows_NT, 10.0.19042) via HTTPS server on port 3692 -- 19/08/2021 13:23:55
+2021-08-19T16:23:55.428Z: [E] Proxy server encountered an exception and is not able to start: TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received null.
+2021-08-19T16:26:46.942Z: Stopping server via app terminated via SIGINT.
+2021-08-19T16:26:46.946Z: Stopping server via normal exit.
+2021-08-19T16:26:50.227Z: [I] Loading configuration from ../conf/config.xml
+2021-08-19T16:26:50.321Z: [I] Starting proxy version 0.1.5 running on DESKTOP-L5NM9UH (Windows_NT, 10.0.19042) via HTTPS server on port 3692 -- 19/08/2021 13:26:50
+2021-08-19T16:26:50.325Z: [E] Proxy server encountered an exception and is not able to start: TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received null.
+2021-08-19T16:28:07.601Z: Stopping server via app terminated via SIGINT.
+2021-08-19T16:28:07.605Z: Stopping server via normal exit.
+2021-08-19T16:28:11.040Z: [I] Loading configuration from ../conf/config.xml
+2021-08-19T16:28:11.067Z: Stopping server via normal exit.

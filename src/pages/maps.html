@@ -83,6 +83,16 @@
               </ul>
             </div>
           </li> 
+
+          <li id="btn_dashboard" class="nav-item" style="cursor: pointer;">
+            <a class="nav-link">
+              <i aria-hidden="true"
+              focusable="false"
+              data-prefix="fad"
+              class="fas fa-tachometer-alt fa-lg"></i>
+              <span class="link-text">Dashboard</span>
+            </a>
+          </li>
           
           <li id="btn_signOut" class="nav-item footer-nav" style="cursor: pointer;">
             <a>
@@ -229,6 +239,12 @@
     <script src="https://kit.fontawesome.com/927400ff6e.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://js.arcgis.com/4.19/esri/themes/light/main.css"> 
     <script src="/socket.io/socket.io.js"></script>
+    <!-- require polyfills for fetch and Promise from https://polyfill.io -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es5%2Cfetch%2CPromise"></script>
+
+    <!-- require ArcGIS REST JS libraries from https://unpkg.com -->
+    <script src="node_modules/@esri/arcgis-rest-request/dist/umd/request.umd.js"></script>
+    <script src="node_modules/@esri/arcgis-rest-auth/dist/umd/auth.umd.js"></script>
 
     <script src="src/pages/js/maps.js" type="module"></script>
 </html>

@@ -34,6 +34,34 @@ $(document).ready(() => {
     callMap(el);
   })
 
+  $('#btn_dashboard').click(() => {
+    const client_id = "kIYvI8kHJ53IqjRf";
+    const client_secrect = "06599cb1933341858d9348a817b31e69";
+
+    // const session = new arcgisRest.ApplicationSession({
+    //   clientId: client_id,
+    //   clientSecret: client_secrect
+    // })
+
+    // session.getToken().then((token) => {
+    //   console.log(token)
+    // })
+
+    arcgisRest.UserSession.beginOAuth2({
+      clientId: client_id,
+      redirectUri: "https://localhost:3000/iframe",
+    }).then((session) => {
+      const validOrigins = ["https://localhost:3000"];
+      session.enablePostMessageAuth(validOrigins);
+      const originalUrl =
+        "https://multiplay.maps.arcgis.com/apps/dashboards/ffaf78fa324040bcb1e8148341a539df";
+      const embedUrl = `${originalUrl}
+          ?arcgis-auth-origin=${encodeURIComponent(window.location.origin)}
+          &arcgis-auth-portal=${encodeURIComponent(session.portal)}`;
+      window.localStorage.setItem('embedUrlDashboard', embedUrl);
+    });
+  })
+
     $('#btn_signOut').click(() => {
       signOut();
     })  

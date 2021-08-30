@@ -1,18 +1,54 @@
-const express = require('./node_modules/express');
+import express from 'express';
 const gisp = express();
-const session = require('express-session');
-const server = require('http').createServer(gisp);
-const socket = require("socket.io")(server, {
+import session from 'express-session';
+import fs from 'fs';
+import path from 'node:path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const options = {
+    key: fs.readFileSync('key.pem'),
+    cert: fs.readFileSync('cert.pem')
+  };
+import https from 'https';
+const server = https.createServer(options, gisp).listen(3000);
+import { Server } from 'socket.io';
+const socket = new Server(server, {
     cors: {
-      origin: "http://localhost:3000",
+      origin: "https://www.testingdomain.com:3000",
     },
   });
 const port = process.env.PORT || 3000;
-const bodyParser = require('body-parser');
-const request = require('request');
-const { client_id, secret } = require('./src/config/auth-arcgis')
-const fs = require('fs');
-const { response } = require('./node_modules/express');
+import bodyParser from 'body-parser';
+import request from 'request';
+import * as auth_arcgis from './src/config/auth_arcgis.js'
+import { response } from 'express';
+// ensures fetch is available as a global
+import swaggerUi from 'swagger-ui-express';
+import swaggerFile from './swagger_output.js'
+
+import { ApplicationSession } from '@esri/arcgis-rest-auth';
+import { UserSession } from '@esri/arcgis-rest-auth';
+
+// UserSession.beginOAuth2({
+//     clientId: auth_arcgis.default.client_id,
+//     redirectUri: "https://multiplay.maps.arcgis.com/sharing/rest/oauth2/authorize",
+//   }).then((session) => {
+//     // for this example we will only send auth to embeds hosted on storymaps.arcgis.com
+//     const validOrigins = ["https://multiplay.maps.arcgis.com/"];
+//     session.enablePostMessageAuth(validOrigins);
+//   });
+
+//   const originalUrl =
+//   "https://multiplay.maps.arcgis.com/apps/dashboards/ffaf78fa324040bcb1e8148341a539df";
+// const embedUrl = `${originalUrl}
+//     ?arcgis-auth-origin=${encodeURIComponent(window.location.origin)}
+//     &arcgis-auth-portal=${encodeURIComponent(session.portal)}`;
+
+const authentication = new ApplicationSession({
+  clientId: auth_arcgis.default.client_id,
+  clientSecret: auth_arcgis.default.secret
+})
 
 const sessionConfig = {
     secret: '06599cb1933341858d9348a817b31e69',
@@ -31,6 +67,7 @@ if (process.env.NODE_ENV === 'production') {
 
 gisp.use(session(sessionConfig));
 
+
 gisp.use(express.static(__dirname + '/'));
 gisp.use(express.static(__dirname + '/pages/'));
 gisp.use(bodyParser.json({limit: '10mb', extended: true}))
@@ -38,8 +75,6 @@ gisp.use(bodyParser.urlencoded({limit: '10mb', extended: false}))
 
 gisp.use(express.static(__dirname + '/'));
 gisp.use(express.static(__dirname + '/login'));
-
-
 
 gisp.get('/', function(req, res){
     res.sendFile(__dirname + '/src/pages/login.html');
@@ -62,22 +97,59 @@ gisp.get('/maps', function(req, res){
     res.sendFile(__dirname + '/src/pages/maps.html');
 });
 
+gisp.get('/iframe', function(req, res){
+    // url not accessible to anonymous users
+    const url = `https://multiplay.maps.arcgis.com/sharing/rest/content/items/ffaf78fa324040bcb1e8148341a539df/data`
+
+    // token will be appended by rest-js
+    // sheets.then(data => {
+    //     console.log(data);
+    // })
+
+    res.sendFile(__dirname + '/src/pages/dashboards.html')
+});
+
 socket.on('connection', (sckt) => {
     sckt.on('arcgis', arg => {
         const { func, pathAcces, tkn } = arg;
         const services = {
-            'tokengenerateInit': (id) => {
+            'tokengen': (id) => {
                 request.post({
                     url: 'https://www.arcgis.com/sharing/rest/oauth2/token/',
                     json: true,
                     form: {
                         'f': 'json',
-                        'client_id': client_id,
-                        'client_secret': secret,
+                        'client_id': auth_arcgis.default.client_id,
+                        'client_secret': auth_arcgis.default.secret,
                         'grant_type': 'client_credentials',
                         'expiration': 1440
                     }
                 }, function(error, response, body) {
+                    if (!body) {
+                        res.redirect('/');
+                    }
+                    const data = {
+                        token: body.access_token
+                    }
+                    socket.emit(id, data);
+                })                
+            },
+            'tokengenerateInit': (id) => {
+                console.log(id)
+                request.post({
+                    url: 'https://www.arcgis.com/sharing/rest/oauth2/token/',
+                    json: true,
+                    form: {
+                        'f': 'json',
+                        'client_id': auth_arcgis.default.client_id,
+                        'client_secret': auth_arcgis.default.secret,
+                        'grant_type': 'client_credentials',
+                        'expiration': 1440
+                    }
+                }, function(error, response, body) {
+                    if (!body) {
+                        res.redirect('/');
+                    }
                     const data = {
                         token: body.access_token,
                         map: {
@@ -111,6 +183,9 @@ socket.on('connection', (sckt) => {
                         'token': tkn
                     }
                 }, (error, response, body) => {
+                    if (!body) {
+                        res.redirect('/');
+                    }
                     if(error) {
                         console.log(error)
                     }            
@@ -127,12 +202,15 @@ socket.on('connection', (sckt) => {
                     json: true,
                     form: {
                         'f': 'json',
-                        'client_id': client_id,
-                        'client_secret': secret,
+                        'client_id': auth_arcgis.default.client_id,
+                        'client_secret': auth_arcgis.default.secret,
                         'grant_type': 'client_credentials',
                         'expiration': 1440
                     }
                 }, function(error, response, body) {
+                    if (!body) {
+                        res.redirect('/');
+                    }
                     const data = {
                         token: body.access_token,
                         map: {
@@ -169,14 +247,19 @@ socket.on('connection', (sckt) => {
                     }
                     socket.emit(id, data);
                 })                
+            },
+            'authFor': () => {
+                socket.emit('teste', authentication)
             }
         }
         services[func](tkn);
     })
 })
 
-require('./src/app/controllers/index')(gisp);
+gisp.use('/valinor/doc', swaggerUi.serve, swaggerUi.setup(swaggerFile))
+import app from './src/app/controllers/index.js';
+app(gisp)
 
-server.listen(port, function () {
-    console.log('Servidor rodando na porta %d', port);
-});
+// server.listen(port, function () {
+//     console.log('Servidor rodando na porta %d', port);
+// });

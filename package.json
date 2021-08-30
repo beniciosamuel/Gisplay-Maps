@@ -5,17 +5,31 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon -- -r dotenv/config server.js",
-    "start": "pm2 start server.js --watch --no-daemon"
+    "start": "pm2 start server.js --watch --no-daemon",
+    "start-gendoc": "node swagger.js",
+    "build": "browserify sever.js -o bundle.js"
   },
+  "type": "module",
   "author": "briariustecno",
   "license": "ISC",
   "dependencies": {
+    "@esri/arcgis-rest-auth": "^3.2.1",
+    "@esri/arcgis-rest-request": "^3.0.0",
+    "apidoc": "^0.29.0",
+    "arcgis-js-api": "^4.20.2",
+    "arcgis-resource-proxy": "^0.1.5",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
+    "browserify": "^17.0.0",
+    "cross-fetch": "^3.1.4",
     "express": "^4.17.1",
     "express-session": "^1.17.2",
+    "faker": "^5.5.3",
     "firebase": "^8.4.1",
     "fs": "^0.0.1-security",
+    "google-spreadsheet": "^3.1.15",
+    "googleapis": "^39.2.0",
+    "isomorphic-form-data": "^2.0.0",
     "jsonwebtoken": "^8.5.1",
     "leaflet-draw-toolbar": "^0.3.0-alpha.1",
     "leaflet-toolbar": "^0.4.0-alpha.2",
@@ -25,7 +39,10 @@
     "path": "^0.12.7",
     "pm2": "^5.1.0",
     "request": "^2.88.2",
-    "socket.io": "^4.1.2"
+    "socket.io": "^4.1.2",
+    "swagger-autogen": "^2.11.1",
+    "swagger-ui-express": "^4.1.6",
+    "uniqid": "^5.4.0"
   },
   "devDependencies": {
     "dotenv": "8.2.0",

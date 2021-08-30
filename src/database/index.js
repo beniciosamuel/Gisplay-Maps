@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 mongoose.connect('mongodb://localhost/noderest', {useNewUrlParser: true, useUnifiedTopology: true});
 mongoose.Promise = global.Promise;
@@ -9,4 +9,4 @@ mongoose.Promise = global.Promise;
 // mongoose.connect(string, {useNewUrlParser: true, useUnifiedTopology: true});
 // mongoose.Promise = global.Promise;
 
-module.exports = mongoose;
+export default mongoose;

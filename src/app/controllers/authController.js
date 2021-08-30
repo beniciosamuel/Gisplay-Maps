@@ -1,26 +1,28 @@
-const express = require('express');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const crypto = require('crypto');
-const mailer = require('../../modules/mailer');
+import express from 'express';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
+import * as mailer from '../../modules/mailer.js';
 
-const authConfig = require('../../config/auth')
+import * as authConfig from '../../config/auth.js';
 
-const User = require('../models/user');
+import User  from '../models/user.js';
 
 function generateToken (params = {}) {
-    return jwt.sign(params, authConfig.secret, {
+    return jwt.sign(params, authConfig.default.secret, {
         expiresIn: 86400,
     });
 }
 
 const router = express.Router();
 
-/* Register the user with this route, to get access you must register the email an password.
-A JSON object containing name, email, password and sector, must be send for this route. */
 router.post('/register', async (req, res) => {
+    /* #swagger.tags = ['Auth']
+     #swagger.description = 'Register the user with this route, to get access you must register the email an password. <br>
+    A JSON object containing name, email, password and sector, must be send for this route'*/
+    /* #swagger.parameters['example'] = { description: '{ \"name\": \"username\",  \"email\": \"useremail\", \"password\": \"password\", \"sector\": \"usersector\"}' } */
     const { email } = req.body;
-
+    
     try {
         if (await User.findOne({ email })) {
             return res.status(400).send({ error: 'User already exists' })
@@ -55,7 +57,7 @@ router.post('/register', async (req, res) => {
                 return res.status(400).send({ error: 'Cannot send confirm email'});
             }
                 
-            return res.send({ ok: true });
+            return res.status(200).send({ ok: true });
         });
     } catch (err) {
         console.log(err);
@@ -63,9 +65,11 @@ router.post('/register', async (req, res) => {
     }
 })
 
-/* Authenticate a user with this route, to get access you must have registered the email and password.
-A JSON object containing email and password must be send for this route. */
 router.post('/authenticate', async (req, res) => {
+    /* #swagger.tags = ['Auth']
+     #swagger.description = 'Authenticate a user with this route, to get access you must have registered the email and password.
+    <br> A JSON object containing email and password must be send for this route.'*/
+    /* #swagger.parameters['example'] = { description: '{ \"email\": \"useremail\", \"password\": \"password\"}' } */
     const { email, password } = req.body;
 
     const user = await User.findOne({ email }).select('+ email password statusEmail sector accessCredential access sign');
@@ -90,7 +94,7 @@ router.post('/authenticate', async (req, res) => {
 
     user.password = undefined;
     
-    res.send({
+    res.status(200).send({
         user, 
         token: generateToken({ id: user.id }),
     })
@@ -99,6 +103,10 @@ router.post('/authenticate', async (req, res) => {
 /* When a user is register, a email to confirm this account is sent, to confirm this user, use this route.
 A JSON object containing email and token of email confirm of the user must be send for this route. */
 router.post('/email_confirm', async (req, res) => {
+    /* #swagger.tags = ['Auth']
+     #swagger.description = 'When a user is register, a email to confirm this account is sent, to confirm this user, use this route.
+    <br> A JSON object containing email and token of email confirm of the user must be send for this route.'*/
+    /* #swagger.parameters['example'] = { description: '{ \"email\": \"useremail\", \"token\": \"token\"}' } */
     const { email, token, password } = req.body;
     console.log(token)
     console.log(email)
@@ -125,7 +133,7 @@ router.post('/email_confirm', async (req, res) => {
             }
         });
 
-        res.send({
+        res.status(200).send({
             ok: true
         })
     } catch (err) {
@@ -134,9 +142,11 @@ router.post('/email_confirm', async (req, res) => {
     }
 })
 
-/* When a user is forgot your password, a email to reset your secret is sent, to send this email, use this route.
-A JSON object containing email of the user must be send for this route. */
 router.post('/forgot_password', async (req, res) => {
+    /* #swagger.tags = ['Auth']
+     #swagger.description = 'When a user is forgot your password, a email to reset your secret is sent, to send this email, use this route.
+    <br> A JSON object containing email of the user must be send for this route.'*/
+    /* #swagger.parameters['example'] = { description: '{ \"email\": \"useremail\" }' } */
     const { email } = req.body;
 
     try {
@@ -167,7 +177,7 @@ router.post('/forgot_password', async (req, res) => {
                 return res.status(400).send({ error: 'Cannot send forgot password email'});
             }                
             
-            return res.send({ ok: true });
+            return res.status(200).send({ ok: true });
         })
     } catch (err) {
         console.log(err)
@@ -175,9 +185,11 @@ router.post('/forgot_password', async (req, res) => {
     }
 })
 
-/* When a user want reset your pass, a new token is generated, to confirm this token use this route.
-A JSON object containing email, token of password confirm and new pass must be send for this route. */
 router.post('/reset_password', async (req, res) => {
+    /* #swagger.tags = ['Auth']
+     #swagger.description = 'When a user want reset your pass, a new token is generated, to confirm this token use this route.
+    <br> A JSON object containing email, token of password confirm and new pass must be send for this route.'*/
+    /* #swagger.parameters['example'] = { description: '{ \"email\": \"useremail\", \"token\": \"token\", \"password\": \"password\"}' } */
     const { email, token, password } = req.body;
 
     try {
@@ -200,10 +212,10 @@ router.post('/reset_password', async (req, res) => {
 
         await user.save();
 
-        res.send({ ok: true });
+        res.status(200).send({ ok: true });
     } catch (err) {
         return res.status(400).send({ error: 'Cannot reset password, try again' })
     }
 })
 
-module.exports = app => app.use('/auth', router);
+export default app => app.use('/auth', router);

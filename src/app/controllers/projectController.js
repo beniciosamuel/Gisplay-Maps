@@ -1,21 +1,26 @@
-const express = require('express');
-const crypto = require('crypto');
-const mailer = require('../../modules/mailer');
-const authMiddleware = require('../middlewares/auth');
+import express from 'express';
+import crypto from 'crypto';
+import * as mailer from '../../modules/mailer.js';
+import authMiddleware from '../middlewares/auth.js'
 
-const User = require('../models/user');
+import User  from '../models/user.js';
 
 const router = express.Router();
 
 router.use(authMiddleware);
 
 router.get('/access-map', async (req, res) => {
-    res.send({ ok:true });
+    /* #swagger.tags = ['Logged']
+     #swagger.description = 'This route is necessary to ensure access to maps with credentials only.'*/
+     
+    res.status(200).send({ ok:true });
 })
 
-/* Use this route to upgrade level of the your user.
-A JSON object containing email of the admin and of the employee must be send for this route. */
 router.put('/upgrade', async (req, res) => {
+    /* #swagger.tags = ['Logged']
+     #swagger.description = 'Use this route to upgrade level of the your user.
+    <br> A JSON object containing email of the admin and of the employee must be send for this route.'*/
+    /* #swagger.parameters['example'] = { description: '{ \"email\": \"adminemail\", \"userUpdate\": \"emailslayer\"}' } */
     const { email, userUpdate } = req.body;
 
     try {
@@ -40,16 +45,18 @@ router.put('/upgrade', async (req, res) => {
             }
         });
 
-        return res.send({ ok: true })
+        return res.status(200).send({ ok: true })
     } catch (err) {
         console.log(err);
         return res.status(400).send({ error: "Cannot upgrade the user, an error has occurred" })
     }
 });
 
-/* Admins can send a email to reset a password for the your employee, use this route for this.
-A JSON object containing email of the admin and of the employee must be send for this route. */
 router.post('/forgot', async (req, res) => {
+    /* #swagger.tags = ['Logged']
+     #swagger.description = 'Admins can send a email to reset a password for the your employee, use this route for this.
+    <br> A JSON object containing email of the admin and of the employee must be send for this route.'*/
+    /* #swagger.parameters['example'] = { description: '{ \"email\": \"adminemail\", \"userResetPass\": \"idslayer\"}' } */
     const { email, userResetPass } = req.body;
 
     try {
@@ -88,7 +95,7 @@ router.post('/forgot', async (req, res) => {
                 return res.status(400).send({ error: 'Cannot send forgot password email'});
             }                
             
-            return res.send({ ok: true });
+            return res.status(200).send({ ok: true });
         })
     } catch (err) {
         console.log(err);
@@ -96,9 +103,11 @@ router.post('/forgot', async (req, res) => {
     }
 })
 
-/* Use this route to resend email to confirm account of the your user.
-A JSON object containing email of the admin and of the employee must be send for this route. */
 router.post('/reset_confirm', async (req, res) => {
+    /* #swagger.tags = ['Logged']
+     #swagger.description = 'Use this route to resend email to confirm account of the your user.
+    <br> A JSON object containing email of the admin and of the employee must be send for this route.'*/
+    /* #swagger.parameters['example'] = { description: '{ \"email\": \"adminemail\", \"userResetPass\": \"emailslayer\"}' } */
     const { email, userToConfirm } = req.body;
 
     try {
@@ -139,7 +148,7 @@ router.post('/reset_confirm', async (req, res) => {
                 return res.status(400).send({ error: 'Cannot send confirm email'});
             }
                 
-            return res.send();
+            return res.status(200).send();
         });
     } catch (err) {
         console.log(err);
@@ -147,9 +156,11 @@ router.post('/reset_confirm', async (req, res) => {
     }
 })
 
-/* Project sector admins can manage all users and make anyone an administrator.
-A JSON object containing email of the admin and of the employee must be send for this route. */
 router.put('/release', async (req, res) => {
+    /* #swagger.tags = ['Logged']
+     #swagger.description = 'Project sector admins can manage all users and make anyone an administrator.
+    <br> A JSON object containing email of the admin and of the employee must be send for this route.'*/
+    /* #swagger.parameters['example'] = { description: '{ \"email\": \"adminemail\", \"userUpdate\": \"idslayer\"}' } */
     const { email, userUpdate } = req.body;
     console.log(email);
 
@@ -171,16 +182,18 @@ router.put('/release', async (req, res) => {
             }
         });
 
-        return res.send({ ok: true })
+        return res.status(200).send({ ok: true })
     } catch (err) {
         console.log(err);
         return res.status(400).send({ error: "Cannot upgrade the user, an error has occurred" })
     }
 });
 
-/* Admins can exclude anyone from their sector, be careful when managing.
-A JSON object containing email of the admin and of the employee must be send for this route. */
 router.delete('/reject', async (req, res) => {
+    /* #swagger.tags = ['Logged']
+     #swagger.description = 'Admins can exclude anyone from their sector, be careful when managing.
+    <br> A JSON object containing email of the admin and of the employee must be send for this route.'*/
+    /* #swagger.parameters['example'] = { description: '{ \"email\": \"adminemail\", \"userRemove\": \"useremail\"}' } */
     const { email, userRemove } = req.body;
 
     try {
@@ -201,7 +214,7 @@ router.delete('/reject', async (req, res) => {
         }
 
         userDel.remove(() => {
-            res.send({ ok: true });
+            res.status(200).send({ ok: true });
         });
     } catch (err) {
         console.log(err);
@@ -210,6 +223,10 @@ router.delete('/reject', async (req, res) => {
 });
 
 router.post('/getall', async (req, res) => {
+    /* #swagger.tags = ['Logged']
+     #swagger.description = 'Admins can getall anyone from their sector, be careful when managing.
+    <br> A JSON object containing email and sector of the admin must be send for this route.'*/
+    /* #swagger.parameters['example'] = { description: '{ \"email\": \"adminemail\" }' } */
     const { email } = req.body;
     const arrUsers = []
     console.log(req.body)
@@ -231,7 +248,7 @@ router.post('/getall', async (req, res) => {
             }
         }
 
-        return res.send(arrUsers)
+        return res.status(200).send(arrUsers)
     } catch (err) {
         console.log(err)
         return res.status(400).send({ error: "Cannot make a query of users" })
@@ -239,6 +256,10 @@ router.post('/getall', async (req, res) => {
 })
 
 router.post('/get-pendents', async (req, res) => {
+    /* #swagger.tags = ['Logged']
+     #swagger.description = 'Admins can getpendents from their sector, be careful when managing.
+    <br> A JSON object containing email and sector of the admin must be send for this route.'*/
+    /* #swagger.parameters['example'] = { description: '{ \"email\": \"adminemail\" }' } */
     const { email } = req.body;
     const arrUsers = [];
 
@@ -259,7 +280,7 @@ router.post('/get-pendents', async (req, res) => {
             }
         }
 
-        return res.send(arrUsers)
+        return res.status(200).send(arrUsers)
     } catch (err) {
         console.log(err)
         return res.status(400).send({ error: "Cannot make a query of users" })
@@ -267,6 +288,10 @@ router.post('/get-pendents', async (req, res) => {
 })
 
 router.post('/sign-out', async (req, res) => {
+    /* #swagger.tags = ['Logged']
+     #swagger.description = 'To sign out a user.
+    <br> A JSON object containing email of the user must be send for this route.'*/
+    /* #swagger.parameters['example'] = { description: '{ \"email\": \"useremail\" }' } */
     const { email } = req.body;
     
     try {
@@ -282,11 +307,11 @@ router.post('/sign-out', async (req, res) => {
             }
         });
 
-        return res.send({ ok:true })
+        return res.status(200).send({ ok:true })
     } catch (err) {
         console.log(err);
         return res.status(400).send({ error: 'User cannot dislog' })
     }
 })
 
-module.exports = app => app.use('/projects', router);
+export default app => app.use('/projects', router);

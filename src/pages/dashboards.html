@@ -1,0 +1,109 @@
+<html>
+    <head>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+      <title>Gisplay-Maps</title>
+  
+      <style>
+        html,
+        body,
+        #viewDiv {
+          padding: 0;
+          margin: 0;
+          height: 100%;
+          width: 100%;
+        }
+      </style>
+
+      <link rel="stylesheet" href="https://js.arcgis.com/4.19/esri/themes/light/main.css">
+
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+      <script src="/socket.io/socket.io.js"></script>
+      <script src="https://js.arcgis.com/4.19/"></script>     
+
+      <!-- require ArcGIS REST JS libraries from https://unpkg.com -->
+      <!-- <script src="node_modules/@esri/arcgis-rest-request/dist/umd/request.umd.js"></script>
+      <script src="node_modules/@esri/arcgis-rest-auth/dist/umd/auth.umd.js"></script> -->
+
+      <script src="/src/pages/js/authParams.js" type="module"></script>
+      <!-- <script type="module">
+        const socket = await io();
+        const userId = JSON.parse(window.localStorage.getItem('dataUser')).user["_id"]
+
+        socket.on(userId, function(dataServ) {           
+            window.teste = () => {
+              require(["esri/config", "esri/WebMap", "esri/views/MapView", "esri/widgets/ScaleBar", "esri/widgets/Search", "esri/widgets/DistanceMeasurement2D",
+              "esri/tasks/Locator", "esri/layers/FeatureLayer", "esri/widgets/Expand", "esri/widgets/Legend", "esri/widgets/Locate", "esri/portal/PortalItem"], 
+                  function (esriConfig, WebMap, MapView, ScaleBar, Search, DistanceMeasurement2D, Locator, FeatureLayer, Expand, Legend, Locate, PortalItem) {
+                      esriConfig.apiKey = 'AAPKfa176b384a0f4731b5616ab458000295sqFrPIg9EfPL30UQ5vEZbERzqVymJealBtlTJ5IDwsRvMZd_uOW5LYFtrmmEIDOO';
+                      esriConfig.request.trustedServers.push("https://www.testingdomain.com:3000/");
+                      esriConfig.request.interceptors.push({
+                          // set the `urls` property to the URL of the FeatureLayer so that this
+                          // interceptor only applies to requests made to the FeatureLayer URL
+                          urls: ["https://services3.arcgis.com/", "https://multiplay.maps.arcgis.com/"],
+                          // use the BeforeInterceptorCallback to add token to query
+                          before: function(params) {
+                              params.requestOptions.query = params.requestOptions.query || {};
+                              params.requestOptions.query.token = dataServ.token;
+                          },
+                      });
+                  }
+              );
+              console.log('testetes')
+            }
+
+            document.getElementById('iframe').contentWindow.teste();
+        })
+      </script> -->
+    </head>
+    <body>
+      <iframe src="https://multiplay.maps.arcgis.com/apps/dashboards/ffaf78fa324040bcb1e8148341a539df" id="iframe" frameborder="0" style="width: 100vmax; height: 100vh;">
+      </iframe>
+    </body>
+  </html>
+
+  <!-- Backup CODE -->
+  <!-- 
+    /* --------------------- First Code -------------------- */
+      // const client_id = "kIYvI8kHJ53IqjRf";
+      // const client_secrect = "06599cb1933341858d9348a817b31e69";
+
+      // const session = new arcgisRest.ApplicationSession({
+      //   clientId: client_id,
+      //   clientSecret: client_secrect
+      // })
+
+      // const originalUrl =
+      //   "https://multiplay.maps.arcgis.com/apps/dashboards/ffaf78fa324040bcb1e8148341a539df";
+      // session.getToken().then((token) => {
+      //   const embedUrl = originalUrl + "#access_token" + token
+      //   console.log(embedUrl)
+      //   $('#iframe').attr('src', embedUrl);
+      // })
+
+      /* --------------------- Second Code -------------------- */
+      // const embedUrl = window.localStorage.getItem('embedUrlDashboard');
+      // console.log(window.location.hash.slice(1));
+      // document.getElementById('iframe').setAttribute('src', embedUrl)
+      
+      // $(document).ready(() => {
+      //   // Parse up any url params
+      //   let params = new URLSearchParams(document.location.search.substring(1));
+      //   console.log(params)
+      //   const arcgisAuthOrigin = params.get("arcgis-auth-origin");
+      //   // const arcgisAuthPortal = params.get("arcgis-auth-portal"); // can optionally check this value too
+      //   if (arcgisAuthOrigin) {
+      //     arcgisRest.UserSession.fromParent(arcgisAuthOrigin)
+      //       .then((session) => {
+      //         // session is a UserSession instance, populated from the parent app
+      //         // the embedded app should exchange this token for one specific to the application
+      //         alert(session)
+      //       })
+      //       .catch((ex) => {
+      //         // The only case it will reject is if the parent is unable to return a credential
+      //         // if the parent does not see the child as a valid origin, the parent will never respond.
+      //         alert(ex)
+      //       });
+      //   }
+      // })
+   -->

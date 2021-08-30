@@ -1,8 +1,15 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'node:path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const dirname = path.dirname(__filename);
 
-module.exports = app => {
-    fs.readdirSync(__dirname)
+export default app => {
+    fs.readdirSync(dirname)
     .filter(file => ((file.indexOf('.')) !== 0 && (file !== "index.js")))
-    .forEach(file => require(path.resolve(__dirname, file))(app));
+    .forEach(file => import('file://' + dirname + '\\' + file).then((module) => {
+        module.default(app)
+    }));
 }
+
+// require(path.resolve(dirname, file))(app)

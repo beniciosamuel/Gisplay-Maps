@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#">
+    <channel>
+        <title><![CDATA[Controle de Serviços]]></title>
+        <description><![CDATA[description]]></description>
+        <link>https://gisplay.multiplay.com</link>
+        <image>
+            <url>https://gisplay.multiplay.com/icon.png</url>
+            <title>Controle de Serviços</title>
+            <link>https://gisplay.multiplay.com</link>
+        </image>
+        <generator>RSS for Node</generator>
+        <lastBuildDate>Wed, 08 Sep 2021 15:26:02 -0300</lastBuildDate>
+        <atom:link href="https://gisplay.multiplay.com/rss.xml" rel="self" type="application/rss+xml"/>
+        <copyright><![CDATA[2021 Samuel Benício]]></copyright>
+        <language><![CDATA[pt-br]]></language>
+        <managingEditor><![CDATA[Samuel Benício]]></managingEditor>
+        <webMaster><![CDATA[Samuel Benício]]></webMaster>
+        <docs>https://gisplay.multiplay.com/rss/docs.html</docs>
+        <ttl>60</ttl>
+        <item>
+            <title><![CDATA[Endereço]]></title>
+            <description><![CDATA[Tipo Serviço]]></description>
+            <guid isPermaLink="false">Endereço</guid>
+            <node>NODE</node>
+            <cto>CTO</cto>
+            <id>ID</id>
+            <d-open>D.Abertura</d-open>
+            <hps>HP&apos;s</hps>
+            <type-service>Tipo Serviço</type-service>
+            <solicitante>Setor Solicitante</solicitante>
+            <technology>Tecnologia</technology>
+            <team>Equipe</team>
+            <obs>Observação Projetos</obs>
+            <d-init>D. Início </d-init>
+            <prev>Previsão</prev>
+            <status>Status</status>
+            <d-finit>Observação Comercial/SAC</d-finit>
+            <audit>D. Fim</audit>
+            <qtd-clients>AUDITORIA</qtd-clients>
+        </item>
+    </channel>
+</rss>
